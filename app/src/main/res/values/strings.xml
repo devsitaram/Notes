@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Notes</string>
+    <string name="login_your_details">Login your details</string>
+    <string name="customer_name">Name/नाम</string>
+    <string name="date">Date/मिति</string>
+    <string name="work">Work/काम</string>
+    <string name="amounts">Amounts/रकम</string>
+    <string name="save">Save</string>
 </resources>

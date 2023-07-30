@@ -21,7 +21,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.record.notes.features.data.DataViewScreen
+import com.record.notes.features.record.DataRecordViewScreen
 import com.record.notes.features.home.HomeViewScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -83,7 +83,7 @@ fun MainViewScreen() {
             Modifier.padding(innerPadding)
         ) {
             composable(ScreenItem.Home.route) { HomeViewScreen() }
-            composable(ScreenItem.Data.route) { DataViewScreen() }
+            composable(ScreenItem.Data.route) { DataRecordViewScreen(navController) }
         }
     }
 }
