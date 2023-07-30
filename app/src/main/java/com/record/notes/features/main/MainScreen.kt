@@ -17,6 +17,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -26,13 +27,13 @@ import com.record.notes.features.home.HomeViewScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainViewScreen() {
-    val navController = rememberNavController()
-    val pages = listOf(ScreenItem.Home, ScreenItem.Data)
+fun MainViewScreen(navController: NavHostController) {
+    val buttonNavController = rememberNavController()
+    val pages = listOf(ButtonNavigationBar.Home, ButtonNavigationBar.Record)
     Scaffold (
         bottomBar = {
             BottomNavigation {
-                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val navBackStackEntry by buttonNavController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination
                 pages.forEach { screen ->
                     BottomNavigationItem(modifier = Modifier.background(color = Color.White),
@@ -61,9 +62,9 @@ fun MainViewScreen() {
                         },
                         selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                         onClick = {
-                            navController.navigate(screen.route) {
+                            buttonNavController.navigate(screen.route) {
                                 // on the back stack as users select items
-                                popUpTo(navController.graph.findStartDestination().id) {
+                                popUpTo(buttonNavController.graph.findStartDestination().id) {
                                     saveState = true
                                 }
                                 // selecting the same item
@@ -78,13 +79,12 @@ fun MainViewScreen() {
         }
     ) { innerPadding ->
         NavHost(
-            navController,
-            startDestination = ScreenItem.Home.route,
+            buttonNavController,
+            startDestination = ButtonNavigationBar.Home.route,
             Modifier.padding(innerPadding)
         ) {
-            composable(ScreenItem.Home.route) { HomeViewScreen() }
-            composable(ScreenItem.Data.route) { DataRecordViewScreen(navController) }
+            composable(ButtonNavigationBar.Home.route) { HomeViewScreen(navController) }
+            composable(ButtonNavigationBar.Record.route) { DataRecordViewScreen(buttonNavController) }
         }
     }
 }
-

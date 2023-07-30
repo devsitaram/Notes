@@ -29,6 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.record.notes.R
+import com.record.notes.features.main.ButtonNavigationBar
 import com.record.notes.features.main.ScreenItem
 import com.sitaram.gameyo.features.util.CancelButton
 import com.sitaram.gameyo.features.util.HeadingTextComponent
@@ -40,15 +41,15 @@ import java.util.Date
 
 @SuppressLint("SimpleDateFormat")
 @Composable
-fun DataRecordViewScreen(navController: NavHostController) {
+fun DataRecordViewScreen(buttonNavController: NavHostController) {
     val context = LocalContext.current
 //    val navController = rememberNavController()
 
     val latestDate = SimpleDateFormat("dd-MM-yyyy")
     val currentDate = latestDate.format(Date())
 
-    var name by remember { mutableStateOf("") }
     var date by remember { mutableStateOf(currentDate) }
+    var name by remember { mutableStateOf("") }
     var work by remember { mutableStateOf("") }
     var amounts by remember { mutableStateOf("") }
 
@@ -59,21 +60,30 @@ fun DataRecordViewScreen(navController: NavHostController) {
             name.isNotEmpty() && date.isNotEmpty() && work.isNotEmpty() && amounts.isNotEmpty()
         }
     }
-    // on click function
+
+    // on click function for record
     val onClickAction: () -> Unit = {
         if (isNotEmpty) {
             isEmptyMessage = true // show error message
-            val loginViewModel = RecordViewModel()
-            val isValidLogin = loginViewModel.recordDetails(name, date, work, amounts, context)
-            if (isValidLogin) {
+            val recordViewModel = RecordViewModel()
+            val isValidRecord = recordViewModel.recordDetails(date, name, work, amounts, context)
+            if (isValidRecord) {
                 // Navigate to the home screen
-                navController.navigate(ScreenItem.Home.route)
+                buttonNavController.navigate(ButtonNavigationBar.Home.route)
             }
         } else {
             Toast.makeText(context, "Please, fill in the blank!\nकृपया, खाली ठाउँ भर्नुहोस्।", Toast.LENGTH_SHORT).show()
             isEmptyMessage = false // hide error message
         }
     }
+
+    // clear the text filed
+    val onClearAction: ()-> Unit = {
+        name = ""
+        work =""
+        amounts = ""
+    }
+
 
     Surface(Modifier.fillMaxSize()) {
         // child layout file
@@ -104,21 +114,21 @@ fun DataRecordViewScreen(navController: NavHostController) {
                     .padding(20.dp)
                     .background(Color.White)
             ) {
-                // customer name
-                InputTextField(
-                    name,
-                    onValueChange = { name = it },
-                    label = stringResource(id = R.string.customer_name),
-                    painterResource = painterResource(R.drawable.ic_person),
-                    isEmptyMessage = isEmptyMessage
-                )
-
                 // date
                 InputTextField(
                     date,
                     onValueChange = { date = it },
                     label = stringResource(id = R.string.date),
                     painterResource = painterResource(R.drawable.ic_date_time),
+                    isEmptyMessage = isEmptyMessage
+                )
+
+                // customer name
+                InputTextField(
+                    name,
+                    onValueChange = { name = it },
+                    label = stringResource(id = R.string.customer_name),
+                    painterResource = painterResource(R.drawable.ic_person),
                     isEmptyMessage = isEmptyMessage
                 )
 
@@ -149,9 +159,10 @@ fun DataRecordViewScreen(navController: NavHostController) {
 
                 CancelButton(
                     value = stringResource(id = R.string.cancel),
-                    onClickAction = {
-                        navController.navigate(ScreenItem.Home.route)
-                    }
+                    onClickAction = onClearAction
+//                    {
+//                        buttonNavController.navigate(ButtonNavigationBar.Home.route)
+//                    }
                 )
             }
         }

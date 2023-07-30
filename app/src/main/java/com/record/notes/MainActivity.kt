@@ -12,8 +12,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.record.notes.features.main.ScreenItem
 import com.record.notes.features.main.MainViewScreen
+import com.record.notes.features.main.ScreenItem
+import com.record.notes.features.update.UpdateViewScreen
 import com.record.notes.ui.theme.NotesTheme
 
 class MainActivity : ComponentActivity() {
@@ -37,8 +38,13 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainNavHost(navController: NavHostController) {
     NavHost(navController = navController, startDestination = "Main"){
-        composable("Main"){
-            MainViewScreen()
+        // main screen
+        composable(ScreenItem.Main.route){
+            MainViewScreen(navController)
+        }
+        // update screen
+        composable(ScreenItem.Update.route){
+            UpdateViewScreen()
         }
     }
 }
