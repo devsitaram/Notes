@@ -20,18 +20,8 @@ import androidx.compose.material.Surface
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
@@ -39,17 +29,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.record.notes.R
-import com.sitaram.gameyo.features.util.CheckboxComponent
-import com.sitaram.gameyo.features.util.HeadingTextComponent
-import com.sitaram.gameyo.features.util.InputTextField
-import com.sitaram.gameyo.features.util.NormalButton
-import com.sitaram.gameyo.features.util.NormalTextComponent
-import com.sitaram.gameyo.features.util.PasswordTextField
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import java.util.TimeZone
 
 
 @SuppressLint("SimpleDateFormat")

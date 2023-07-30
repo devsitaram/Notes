@@ -1,6 +1,7 @@
 package com.record.notes.features.record
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -29,9 +30,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.record.notes.R
 import com.record.notes.features.main.ScreenItem
+import com.sitaram.gameyo.features.util.CancelButton
 import com.sitaram.gameyo.features.util.HeadingTextComponent
+import com.sitaram.gameyo.features.util.InputAmountTextField
 import com.sitaram.gameyo.features.util.InputTextField
-import com.sitaram.gameyo.features.util.NormalButton
+import com.sitaram.gameyo.features.util.SaveButton
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -51,22 +54,24 @@ fun DataRecordViewScreen(navController: NavHostController) {
 
     var isEmptyMessage by remember { mutableStateOf(true) }
     // check the empty text fields
-    val isEmpty by remember {
-        derivedStateOf { name.isEmpty() && date.isEmpty() && work.isEmpty() && amounts.isEmpty() }
+    val isNotEmpty by remember {
+        derivedStateOf {
+            name.isNotEmpty() && date.isNotEmpty() && work.isNotEmpty() && amounts.isNotEmpty()
+        }
     }
-
-    // Login button click handler
-    val onLoginClick: () -> Unit = {
-        if(isEmpty){
-            isEmptyMessage = false // show error message
-        } else {
-            isEmptyMessage = true // hide error message
+    // on click function
+    val onClickAction: () -> Unit = {
+        if (isNotEmpty) {
+            isEmptyMessage = true // show error message
             val loginViewModel = RecordViewModel()
             val isValidLogin = loginViewModel.recordDetails(name, date, work, amounts, context)
             if (isValidLogin) {
                 // Navigate to the home screen
                 navController.navigate(ScreenItem.Home.route)
             }
+        } else {
+            Toast.makeText(context, "Please, fill in the blank!\nकृपया, खाली ठाउँ भर्नुहोस्।", Toast.LENGTH_SHORT).show()
+            isEmptyMessage = false // hide error message
         }
     }
 
@@ -113,7 +118,7 @@ fun DataRecordViewScreen(navController: NavHostController) {
                     date,
                     onValueChange = { date = it },
                     label = stringResource(id = R.string.date),
-                    painterResource = painterResource(R.drawable.ic_person),
+                    painterResource = painterResource(R.drawable.ic_date_time),
                     isEmptyMessage = isEmptyMessage
                 )
 
@@ -122,27 +127,72 @@ fun DataRecordViewScreen(navController: NavHostController) {
                     work,
                     onValueChange = { work = it },
                     label = stringResource(id = R.string.work),
-                    painterResource = painterResource(R.drawable.ic_person),
+                    painterResource = painterResource(R.drawable.ic_work),
                     isEmptyMessage = isEmptyMessage
                 )
 
                 // amounts
-                InputTextField(
+                InputAmountTextField(
                     amounts,
                     onValueChange = { amounts = it },
                     label = stringResource(id = R.string.amounts),
-                    painterResource = painterResource(R.drawable.ic_person),
                     isEmptyMessage = isEmptyMessage
                 )
 
                 Spacer(modifier = Modifier.padding(top = 20.dp))
 
                 // login button
-                NormalButton(
+                SaveButton(
                     value = stringResource(id = R.string.save),
-                    onClickAction = onLoginClick
+                    onClickAction = onClickAction
+                )
+
+                CancelButton(
+                    value = stringResource(id = R.string.cancel),
+                    onClickAction = {
+                        navController.navigate(ScreenItem.Home.route)
+                    }
                 )
             }
         }
     }
 }
+
+
+//// name empty
+//var isNameEmptyMessage by remember { mutableStateOf(true) }
+//val isNameEmpty by remember {
+//    derivedStateOf {
+//        name.isNotEmpty()
+//    }
+//}
+//
+//// date empty
+//var isDateEmptyMessage by remember { mutableStateOf(true) }
+//val isDateEmpty by remember {
+//    derivedStateOf {
+//        name.isNotEmpty()
+//    }
+//}
+//
+//// work empty
+//var isWorkEmptyMessage by remember { mutableStateOf(true) }
+//val isWorkEmpty by remember {
+//    derivedStateOf {
+//        name.isNotEmpty()
+//    }
+//}
+//
+//// amount empty
+//var isAmountEmptyMessage by remember { mutableStateOf(true) }
+//val isAmountEmpty by remember {
+//    derivedStateOf {
+//        name.isNotEmpty()
+//    }
+//}
+//
+//val isEmpty by remember {
+//    derivedStateOf {
+//        name.isNotEmpty() && date.isNotEmpty() && work.isNotEmpty() && amounts.isNotEmpty()
+//    }
+//}

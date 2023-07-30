@@ -1,5 +1,6 @@
 package com.sitaram.gameyo.features.util
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -99,7 +100,8 @@ fun InputTextField(
             Icon(painter = painterResource, contentDescription = "")
         },
         modifier = Modifier
-            .fillMaxWidth().padding(top = 5.dp),
+            .fillMaxWidth()
+            .padding(top = 5.dp),
     )
     // if the fields is empty then show error message
     if (!isEmptyMessage) {
@@ -107,53 +109,85 @@ fun InputTextField(
     }
 }
 
-// password input text
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PasswordTextField(
+fun InputAmountTextField(
     value: String,
-    painterResource: Painter,
     onValueChange: (String) -> Unit = {},
     label: String,
     isEmptyMessage: Boolean
 ) {
-    val passwordVisible = remember { mutableStateOf(false) }
-
+    // input text fields
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        modifier = Modifier
-            .fillMaxWidth(),
+        // text fields bar's text
         label = {
             Text(label)
         },
         colors = TextFieldDefaults.outlinedTextFieldColors(
             cursorColor = Purple80
         ),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-        // lest side icon
-        leadingIcon = {
-            Icon(painter = painterResource, contentDescription = "")
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+        leadingIcon = { Text(text = "Rs.")
         },
-        // right side icon
-//        trailingIcon = {
-//            val iconImage = if (passwordVisible.value) {
-//                painterResource(R.drawable.ic_password_invisible)
-//            } else {
-//                painterResource(R.drawable.ic_password_visible)
-//            }
-//            IconButton(onClick = { passwordVisible.value = !passwordVisible.value }) {
-//                Icon(painter = iconImage, contentDescription = null)
-//            }
-//        },
-        visualTransformation = if (passwordVisible.value) VisualTransformation.None else PasswordVisualTransformation()
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 5.dp),
     )
     // if the fields is empty then show error message
     if (!isEmptyMessage) {
-        Spacer(modifier = Modifier.padding(top = 4.dp))
         Text(text = "Enter the valid $label", style = TextStyle(fontSize = 12.sp), color = Color.Red)
     }
 }
+
+//// password input text
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Composable
+//fun PasswordTextField(
+//    value: String,
+//    painterResource: Painter,
+//    onValueChange: (String) -> Unit = {},
+//    label: String,
+//    isEmptyMessage: Boolean
+//) {
+//    val passwordVisible = remember { mutableStateOf(false) }
+//
+//    OutlinedTextField(
+//        value = value,
+//        onValueChange = onValueChange,
+//        modifier = Modifier
+//            .fillMaxWidth(),
+//        label = {
+//            Text(label)
+//        },
+//        colors = TextFieldDefaults.outlinedTextFieldColors(
+//            cursorColor = Purple80
+//        ),
+//        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+//        // lest side icon
+//        leadingIcon = {
+//            Icon(painter = painterResource, contentDescription = "")
+//        },
+//        // right side icon
+////        trailingIcon = {
+////            val iconImage = if (passwordVisible.value) {
+////                painterResource(R.drawable.ic_password_invisible)
+////            } else {
+////                painterResource(R.drawable.ic_password_visible)
+////            }
+////            IconButton(onClick = { passwordVisible.value = !passwordVisible.value }) {
+////                Icon(painter = iconImage, contentDescription = null)
+////            }
+////        },
+//        visualTransformation = if (passwordVisible.value) VisualTransformation.None else PasswordVisualTransformation()
+//    )
+//    // if the fields is empty then show error message
+//    if (!isEmptyMessage) {
+//        Spacer(modifier = Modifier.padding(top = 4.dp))
+//        Text(text = "Enter the valid $label", style = TextStyle(fontSize = 12.sp), color = Color.Red)
+//    }
+//}
 
 // check box
 @Composable
@@ -181,11 +215,31 @@ fun CheckboxComponent() {
 
 // normal button
 @Composable
-fun NormalButton(value: String, onClickAction: () -> Unit) {
+fun SaveButton(value: String, onClickAction: () -> Unit) {
     Button(
         onClick = onClickAction,
         modifier = Modifier
-            .fillMaxWidth().padding(5.dp),
+            .fillMaxWidth()
+            .padding(5.dp),
+    ) {
+        Text(
+            fontSize = 15.sp,
+            text = value,
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier.padding(5.dp),
+            color = Color.White
+        )
+    }
+}
+
+@Composable
+fun CancelButton(value: String, onClickAction: () -> Unit) {
+    Button(
+        onClick = onClickAction,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(5.dp),
+        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray, contentColor = Color.White)
     ) {
         Text(
             fontSize = 15.sp,
