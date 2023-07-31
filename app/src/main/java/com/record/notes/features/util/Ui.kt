@@ -78,7 +78,7 @@ fun HeadingTextComponent(value: String, color: Color) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InputTextField(
-    value: String,
+    value: String?,
     onValueChange: (String) -> Unit = {},
     label: String,
     painterResource: Painter,
@@ -86,7 +86,7 @@ fun InputTextField(
 ) {
     // input text fields
     OutlinedTextField(
-        value = value,
+        value = value!!,
         onValueChange = onValueChange,
         // text fields bar's text
         label = {

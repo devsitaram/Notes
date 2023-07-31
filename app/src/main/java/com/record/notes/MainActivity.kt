@@ -44,7 +44,7 @@ fun MainNavHost(navController: NavHostController) {
         }
         // update screen
         composable(ScreenItem.Update.route){
-            UpdateViewScreen()
+            UpdateViewScreen(navController)
         }
     }
 }

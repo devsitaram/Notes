@@ -83,7 +83,7 @@ fun MainViewScreen(navController: NavHostController) {
             startDestination = ButtonNavigationBar.Home.route,
             Modifier.padding(innerPadding)
         ) {
-            composable(ButtonNavigationBar.Home.route) { HomeViewScreen(navController) }
+            composable(ButtonNavigationBar.Home.route) { HomeViewScreen(buttonNavController, navController) }
             composable(ButtonNavigationBar.Record.route) { DataRecordViewScreen(buttonNavController) }
         }
     }

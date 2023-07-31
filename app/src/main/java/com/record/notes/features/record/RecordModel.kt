@@ -1,11 +1,14 @@
 package com.record.notes.features.record
 
 import android.content.Context
-import com.record.notes.features.database.DatabaseHelper
+import com.record.notes.features.database.sqLite.SQLiteDBHelper
 
 class RecordModel {
+//    fun getRecordCustomer(customerList: ArrayList<Customer>, context: Context): Completable? {
+//        return DatabaseHelper.getInstance(context)?.CustomerDao()?.insertCustomer(customerList) // return the user data
+//    }
 
     fun getRecordingData(name: String, date: String, work: String, amounts: String, context: Context): Boolean? {
-        return DatabaseHelper(context).recordCustomerDetails(name, date, work, amounts)
+        return SQLiteDBHelper(context).recordCustomerDetails(name, date, work, amounts)
     }
 }
