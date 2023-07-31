@@ -7,4 +7,8 @@ class HomeModel {
     fun getCustomer(context: Context): ArrayList<CustomerPojo> {
         return DatabaseHelper(context).getCustomerData(context)
     }
+
+    fun getDeleteCustomer(customerId: String, context: Context): Boolean? {
+        return DatabaseHelper(context).deleteCustomerById(customerId)
+    }
 }

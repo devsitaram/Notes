@@ -22,13 +22,13 @@ class DatabaseHelper(context: Context?) :
         // user table
         const val CUSTOMER_TABLE = "customer"
         const val CUSTOMER_ID = "id"
-        const val RECORDING_DATE = "date"
         const val CUSTOMER_NAME = "customer_name"
+        const val RECORDING_DATE = "date"
         const val WORK = "work"
         const val DUE_AMOUNTS = "due_amounts"
 
-        private var userId: String? = null
-        private var oldPassword: String? = null
+//        private var userId: String? = null
+//        private var oldPassword: String? = null
         // data table
     }
 
@@ -37,7 +37,7 @@ class DatabaseHelper(context: Context?) :
         // create the database table
         db.execSQL(
             " CREATE TABLE " + CUSTOMER_TABLE +
-                    "(" + CUSTOMER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + RECORDING_DATE + " TEXT, " + CUSTOMER_NAME + " TEXT, "+ WORK + " TEXT, " + DUE_AMOUNTS + " TEXT " + ")"
+                    "(" + CUSTOMER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + CUSTOMER_NAME + " TEXT, " + RECORDING_DATE + " TEXT, " + WORK + " TEXT, " + DUE_AMOUNTS + " TEXT " + ")"
         )
     }
 
@@ -49,20 +49,18 @@ class DatabaseHelper(context: Context?) :
     }
 
     // insert the user
-    fun recordCustomerDetails(date: String, name: String, work: String, amounts: String): Boolean? {
+    fun recordCustomerDetails(name: String, date: String, work: String, amounts: String): Boolean? {
         return try {
             val databaseWrite = this.writableDatabase // write only Insert, update, delete query
             val values = ContentValues()
-            values.put(RECORDING_DATE, date)
             values.put(CUSTOMER_NAME, name)
+            values.put(RECORDING_DATE, date)
             values.put(WORK, work)
             values.put(DUE_AMOUNTS, amounts)
-
-//            Log.e("Customer Date:", date)
-//            Log.e("Customer Name:", name)
-//            Log.e("Customer Work:", work)
-//            Log.e("Customer Amount:", amounts)
-
+            Log.e("Customer Name:", name)
+            Log.e("Customer Date:", date)
+            Log.e("Customer Work:", work)
+            Log.e("Customer Amount:", amounts)
             databaseWrite.insert(CUSTOMER_TABLE, null, values) // insert the user data in database
             true
         } catch (ex: SQLException) {
@@ -79,12 +77,13 @@ class DatabaseHelper(context: Context?) :
         if (cursor.moveToFirst()) {
             do {
                 // store the data in variables
-                val recordDate = cursor.getString(cursor.getColumnIndex(RECORDING_DATE)) // date
+                val customerId = cursor.getString(cursor.getColumnIndex(CUSTOMER_ID)) // customer Id
                 val customerName = cursor.getString(cursor.getColumnIndex(CUSTOMER_NAME)) // customer name
+                val recordDate = cursor.getString(cursor.getColumnIndex(RECORDING_DATE)) // date
                 val customerWork = cursor.getString(cursor.getColumnIndex(WORK)) // work
                 val customerAmounts = cursor.getString(cursor.getColumnIndex(DUE_AMOUNTS)) // amounts
                 // add all details in list
-                customerList.add(CustomerPojo(recordDate, customerName, customerWork, customerAmounts))
+                customerList.add(CustomerPojo(customerId, customerName, recordDate, customerWork, customerAmounts))
             } while (cursor.moveToNext())
         } else {
             Toast.makeText(context, "The database has no data!\nडाटाबेससँग कुनै डाटा छैन!", Toast.LENGTH_SHORT).show()
@@ -94,24 +93,32 @@ class DatabaseHelper(context: Context?) :
     }
 
     // get email
-//    fun getUserEmail(email: String): Boolean {
-//        // create the object of sqLiteDatabase and call the getReadableDatabase methods
-//        val sqLiteDatabaseRead = this.readableDatabase
-//        val cursor = sqLiteDatabaseRead.rawQuery("SELECT * FROM $USER_TABLE", null)
-//
-//        // use the while loop
-//        while (cursor.moveToNext()) {
-//            // check the user login details are valid or not
-//            if (email == cursor.getString(1)) {
-//                userId = cursor.getString(0)
-//                oldPassword = cursor.getString(3)
+    fun deleteCustomerById(customerId: String): Boolean {
+        // create the object of sqLiteDatabase and call the getReadableDatabase methods
+        val sqLiteDatabaseRead = this.readableDatabase
+        val sqLiteDatabaseWrite = this.writableDatabase
+        val cursor = sqLiteDatabaseRead.rawQuery("SELECT * FROM $CUSTOMER_TABLE", null)
+
+        // use the while loop
+        while (cursor.moveToNext()) {
+            // check the user login details are valid or not
+            if (customerId == cursor.getString(0)) {
+                Log.e("Customer Id:", customerId)
+                val updateQuery = "DELETE FROM $CUSTOMER_TABLE WHERE $CUSTOMER_ID = ?"
+                sqLiteDatabaseWrite.execSQL(updateQuery, arrayOf(customerId.toInt()))
+                cursor.close()
+                return true
+            }
+        }
+        cursor.close()
+        return false
+    }
+
+//                val whereClause = "$CUSTOMER_ID = ?"
+//                val whereArgs = arrayOf(customerId)
+//                sqlLiteDatabaseWrite.delete(CUSTOMER_TABLE, whereClause, whereArgs)
 //                cursor.close()
 //                return true
-//            }
-//        }
-//        cursor.close()
-//        return false
-//    }
 
     // update password
 //    @SuppressLint("Recycle")

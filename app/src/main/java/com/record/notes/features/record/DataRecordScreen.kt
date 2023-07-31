@@ -48,8 +48,8 @@ fun DataRecordViewScreen(buttonNavController: NavHostController) {
     val latestDate = SimpleDateFormat("dd-MM-yyyy")
     val currentDate = latestDate.format(Date())
 
-    var date by remember { mutableStateOf(currentDate) }
     var name by remember { mutableStateOf("") }
+    var date by remember { mutableStateOf(currentDate) }
     var work by remember { mutableStateOf("") }
     var amounts by remember { mutableStateOf("") }
 
@@ -66,7 +66,7 @@ fun DataRecordViewScreen(buttonNavController: NavHostController) {
         if (isNotEmpty) {
             isEmptyMessage = true // show error message
             val recordViewModel = RecordViewModel()
-            val isValidRecord = recordViewModel.recordDetails(date, name, work, amounts, context)
+            val isValidRecord = recordViewModel.recordDetails(name, date, work, amounts, context)
             if (isValidRecord) {
                 // Navigate to the home screen
                 buttonNavController.navigate(ButtonNavigationBar.Home.route)
@@ -83,7 +83,6 @@ fun DataRecordViewScreen(buttonNavController: NavHostController) {
         work =""
         amounts = ""
     }
-
 
     Surface(Modifier.fillMaxSize()) {
         // child layout file
@@ -114,7 +113,7 @@ fun DataRecordViewScreen(buttonNavController: NavHostController) {
                     .padding(20.dp)
                     .background(Color.White)
             ) {
-                // date
+                // customer name
                 InputTextField(
                     date,
                     onValueChange = { date = it },
