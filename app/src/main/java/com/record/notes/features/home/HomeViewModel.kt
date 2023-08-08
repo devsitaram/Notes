@@ -11,41 +11,29 @@ class HomeViewModel: ViewModel() {
 
     private val validator = InputValidator()
     private val homeModel = HomeModel()
-
-    // Assuming the property is of StateFlow type
-    private val _updateName = MutableStateFlow("")
-    val updateName: StateFlow<String> get() = _updateName
-
-    private val _updateDate = MutableStateFlow("")
-    val updateDate: StateFlow<String> get() = _updateDate
-
-    private val _updateWork = MutableStateFlow("")
-    val updateWork: StateFlow<String> get() = _updateWork
-
-    private val _updateAmounts = MutableStateFlow("")
-    val updateAmounts: StateFlow<String> get() = _updateAmounts
-
     // get the customer details from database
     fun getCustomer(context: Context, onCustomerList: (List<CustomerPojo>) -> Unit) {
         val customerList = homeModel.getCustomer(context)
         if (customerList.isNotEmpty()) {
             // add the list
             onCustomerList.invoke(customerList)
+        } else {
+            Toast.makeText(context, "Sorry Brow No data!", Toast.LENGTH_SHORT).show()
         }
     }
 
     // get customer id for delete
-    fun getDeleteCustomerById(customerId: String, customerName: String, context: Context): Boolean {
-        return if (customerId.isEmpty()){
+    fun getDeleteCustomer(name: String?, context: Context?): Boolean {
+        return if (name!!.isEmpty()){
             Toast.makeText(context, "The id is not available", Toast.LENGTH_SHORT).show()
             false
         } else {
-            return setDeleteCustomer(customerId, customerName, context)
+            return setDeleteCustomer(name, context)
         }
     }
     // set delete
-    private fun setDeleteCustomer(customerId: String, customerName: String, context: Context): Boolean {
-        val isSuccess = homeModel.getDelete(customerId, customerName, context)
+    private fun setDeleteCustomer(name: String, context: Context?): Boolean {
+        val isSuccess = homeModel.deleteCustomer(name, context)
         return if (isSuccess == true){
             Toast.makeText(context, "Delete successful.", Toast.LENGTH_SHORT).show()
             true
@@ -56,12 +44,12 @@ class HomeViewModel: ViewModel() {
     }
 
     // update
-    fun getUpdateCustomer(id: String, name: String, date: String, work: String, amounts: String, context: Context): Boolean? {
+    fun getUpdateCustomer(id: Long?, name: String?, date: String?, work: String?, amounts: String?, context: Context?): Boolean? {
         val validName = validator.textValidation(name)
         val validDate = validator.dateValidation(date)
         val validWork = validator.textValidation(work)
         val validAmount = validator.numberValidation(amounts)
-        return if (!validName || !validDate || !validWork || !validAmount) {
+        return if (!validName!! || !validDate!! || !validWork!! || !validAmount!!) {
             Toast.makeText(context, "Your data is incorrect!\nतपाईको डाटा गलत छ!\n", Toast.LENGTH_SHORT).show()
             false
         } else {
@@ -69,7 +57,7 @@ class HomeViewModel: ViewModel() {
         }
     }
 
-    private fun setUpdateCustomer(id: String, name: String, date: String, work: String, amounts: String, context: Context): Boolean? {
+    private fun setUpdateCustomer(id: Long?, name: String?, date: String?, work: String?, amounts: String?, context: Context?): Boolean? {
         val isSuccess = homeModel.getUpdate(id, name, date, work, amounts, context)
         return if (isSuccess == false){
             Toast.makeText(context, "On expected data is not update.", Toast.LENGTH_SHORT).show()

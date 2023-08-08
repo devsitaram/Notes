@@ -1,6 +1,7 @@
 package com.record.notes.features.record
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -46,6 +47,7 @@ import java.util.Objects
 
 private val compositeDisposable = CompositeDisposable()
 val recordViewModel = RecordViewModel()
+
 @SuppressLint("SimpleDateFormat")
 @Composable
 fun DataRecordViewScreen(buttonNavController: NavHostController) {
@@ -71,28 +73,27 @@ fun DataRecordViewScreen(buttonNavController: NavHostController) {
     // on click function for record
     val onClickAction: () -> Unit = {
         if (isNotEmpty) {
-            isEmptyMessage = true // show error message
+            isEmptyMessage = true // hide error message
             val recordViewModel = RecordViewModel()
-            val isValidRecord = recordViewModel.getRecordDetails(name, date, work, amounts, context)
-            if (isValidRecord) {
-                // Navigate to the home screen
+            val isRecordSuccess = recordViewModel.getRecordDetails(name, date, work, amounts, context)
+            if (isRecordSuccess == true){
                 buttonNavController.navigate(ButtonNavigationBar.Home.route)
             }
+
         } else {
             Toast.makeText(context, "Please, fill in the blank!\nकृपया, खाली ठाउँ भर्नुहोस्।", Toast.LENGTH_SHORT).show()
-            isEmptyMessage = false // hide error message
+            isEmptyMessage = false // show error message
         }
     }
 
     // clear the text filed
-    val onClearAction: ()-> Unit = {
+    val onClearAction: () -> Unit = {
         name = ""
-        work =""
+        work = ""
         amounts = ""
     }
 
     Surface(Modifier.fillMaxSize()) {
-
         // Home screen data show file
         Column(
             modifier = Modifier
@@ -172,82 +173,3 @@ fun DataRecordViewScreen(buttonNavController: NavHostController) {
         }
     }
 }
-
-
-//// name empty
-//var isNameEmptyMessage by remember { mutableStateOf(true) }
-//val isNameEmpty by remember {
-//    derivedStateOf {
-//        name.isNotEmpty()
-//    }
-//}
-//
-//// date empty
-//var isDateEmptyMessage by remember { mutableStateOf(true) }
-//val isDateEmpty by remember {
-//    derivedStateOf {
-//        name.isNotEmpty()
-//    }
-//}
-//
-//// work empty
-//var isWorkEmptyMessage by remember { mutableStateOf(true) }
-//val isWorkEmpty by remember {
-//    derivedStateOf {
-//        name.isNotEmpty()
-//    }
-//}
-//
-//// amount empty
-//var isAmountEmptyMessage by remember { mutableStateOf(true) }
-//val isAmountEmpty by remember {
-//    derivedStateOf {
-//        name.isNotEmpty()
-//    }
-//}
-//
-//val isEmpty by remember {
-//    derivedStateOf {
-//        name.isNotEmpty() && date.isNotEmpty() && work.isNotEmpty() && amounts.isNotEmpty()
-//    }
-//}
-
-
-
-// on click function for record
-//val onClickAction: () -> Unit = {
-//    if (isNotEmpty) {
-//        isEmptyMessage = true // show error message
-//        try {
-//            val success = Objects.requireNonNull<Completable>(recordViewModel.insertCustomerData(name, date, work, amounts, context))
-//                .subscribeOn(Schedulers.io())
-//                .subscribe(object : CompletableObserver {
-//                    override fun onSubscribe(disposable: Disposable) {
-//                        compositeDisposable.add(disposable)
-//                    }
-//
-//                    override fun onComplete() {
-//                        // recycler view
-//                    }
-//
-//                    override fun onError(e: Throwable) {}
-//                })
-//            if (success != null) {
-//                // Navigate to the home screen
-//                buttonNavController.navigate(ButtonNavigationBar.Home.route)
-//            }
-//        } catch (exception: NullPointerException) {
-//            Toast.makeText(context, "exception", Toast.LENGTH_SHORT).show()
-//        }
-////
-////            val recordViewModel = RecordViewModel()
-////            val isValidRecord = recordViewModel.recordDetails(name, date, work, amounts, context)
-////            if (isValidRecord) {
-////                // Navigate to the home screen
-////                buttonNavController.navigate(ButtonNavigationBar.Home.route)
-////            }
-//    } else {
-//        Toast.makeText(context, "Please, fill in the blank!\nकृपया, खाली ठाउँ भर्नुहोस्।", Toast.LENGTH_SHORT).show()
-//        isEmptyMessage = false // hide error message
-//    }
-//}

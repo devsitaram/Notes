@@ -15,6 +15,7 @@ import androidx.navigation.compose.rememberNavController
 import com.record.notes.features.main.MainViewScreen
 import com.record.notes.features.main.ScreenItem
 import com.record.notes.features.update.UpdateViewScreen
+import com.record.notes.features.video.VideoPlayScreen
 import com.record.notes.ui.theme.NotesTheme
 
 class MainActivity : ComponentActivity() {
@@ -27,8 +28,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val navController = rememberNavController()
-                    MainNavHost(navController)
+                    VideoPlayScreen()
+//                    val navController = rememberNavController()
+//                    MainNavHost(navController)
                 }
             }
         }
